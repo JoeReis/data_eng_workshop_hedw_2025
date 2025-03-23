@@ -4,8 +4,7 @@
 	"forwardPorts": [
 		5432, // PostgreSQL
 		8501, // Streamlit
-		8888, // jupyterlab
-		4213 // DuckDB
+		8888 // JupyterLab
 	],
 	"customizations": {
 		"vscode": {
@@ -27,6 +26,5 @@
 	},
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
-	// Use 'postStartCommand' to run commands after the container is started
-	"postStartCommand": "service postgresql start && jupyterlab && duckdb ui && streamlit run app.py"
+	"postStartCommand": "source ~/.bashrc"
 }
