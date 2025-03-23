@@ -26,5 +26,5 @@
 	},
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
-	"postStartCommand": "source ~/.bashrc"
+	"postStartCommand": "bash -c 'service postgresql start; nohup streamlit run /path/to/your/app.py --server.port=8501 > /tmp/streamlit.log 2>&1 & nohup jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root > /tmp/jupyter.log 2>&1 &'"
 }
