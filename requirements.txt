@@ -1,0 +1,12 @@
+dagster
+dagster-webserver
+dagster-postgres
+dlt
+duckdb-engine
+duckdb
+great_expectations
+pandas
+psycopg2-binary
+scikit-learn
+streamlit
+jupyterlab

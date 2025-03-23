@@ -1,0 +1,32 @@
+{
+	"name": "Data Stack Dev Container",
+	"dockerFile": "../Dockerfile",
+	"forwardPorts": [
+		5432, // PostgreSQL
+		8501, // Streamlit
+		8888, // jupyterlab
+		4213 // DuckDB
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-toolsai.jupyter",
+				"ms-azuretools.vscode-docker",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.linting.enabled": true,
+				"python.formatting.provider": "black",
+				"editor.formatOnSave": true
+			}
+		}
+	},
+	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
+	"remoteUser": "root",
+	// Use 'postStartCommand' to run commands after the container is started
+	"postStartCommand": "service postgresql start && jupyterlab && duckdb ui && streamlit run app.py"
+}
