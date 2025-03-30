@@ -3,22 +3,20 @@
 	"dockerFile": "../Dockerfile",
 	"forwardPorts": [
 		5432, // PostgreSQL
-		8501, // Streamlit (currently not used)
-		8888 // JupyterLab
+		8501 // Streamlit
 	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"ms-python.python",
 				"ms-python.vscode-pylance",
-				"ms-toolsai.jupyter",
 				"ms-azuretools.vscode-docker",
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg"
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"python.linting.enabled": true,
+				"python.linting.enabled": true, 
 				"python.formatting.provider": "black",
 				"editor.formatOnSave": true
 			}
@@ -26,5 +24,5 @@
 	},
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
-	"postStartCommand": "bash -c 'service postgresql start; until pg_isready ; do sleep 1; done; nohup jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root > /tmp/jupyter.log 2>&1 &'"
+	"postStartCommand": "bash -c 'service postgresql start; until pg_isready ; do sleep 1; done'"
 }
