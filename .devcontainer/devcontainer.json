@@ -3,7 +3,8 @@
 	"dockerFile": "../Dockerfile",
 	"forwardPorts": [
 		5432, // PostgreSQL
-		8501 // Streamlit
+		8501, // Streamlit
+		11434 // Ollama
 	],
 	"customizations": {
 		"vscode": {
@@ -16,7 +17,7 @@
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"python.linting.enabled": true, 
+				"python.linting.enabled": true,
 				"python.formatting.provider": "black",
 				"editor.formatOnSave": true
 			}
@@ -24,5 +25,5 @@
 	},
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
-	"postStartCommand": "bash -c 'service postgresql start; until pg_isready ; do sleep 1; done'"
+	"postStartCommand": "bash -c 'service postgresql start; until pg_isready ; do sleep 1; done; if ! pgrep -f ollama; then ollama serve > /tmp/ollama.log 2>&1 & fi'"
 }
