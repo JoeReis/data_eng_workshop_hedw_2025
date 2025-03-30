@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install -y \
     less \
     netcat \
     libc6 \
+    gnupg \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize PostgreSQL database
@@ -52,6 +54,9 @@ RUN pip install --no-cache-dir \
     flake8 \
     pylint \
     ipython
+
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Install DuckDB CLI
 RUN if [ "$(uname -m)" = "aarch64" ]; then \
@@ -108,6 +113,12 @@ RUN echo '#!/bin/bash\n\
     service postgresql start\n\
     wait_for_service 5432 "PostgreSQL"\n\
     \n\
+    echo "Starting Ollama..."\n\
+    ollama serve &\n\
+    sleep 5\n\
+    echo "Pulling Llama3.2 model (this may take a while)..."\n\
+    ollama pull llama3.2 &\n\
+    \n\
     echo "Starting Streamlit..."\n\
     if [ -f "/workspace/app.py" ]; then\n\
     streamlit run /workspace/app.py --server.address=0.0.0.0 &\n\
@@ -122,8 +133,10 @@ RUN echo '#!/bin/bash\n\
     echo "Access your services at:"\n\
     echo "PostgreSQL: localhost:5432 (User: root, Password: root)"\n\
     echo "DuckDB: Use '\''duck'\'' command in terminal"\n\
+    echo "Ollama: API available at localhost:11434"\n\
     echo "Streamlit: localhost:8501"\n\
     echo "======================"\n\
+    echo "Use '\''ollama run llama3.2'\'' to interact with Llama3.2 model"\n\
     \n\
     # Monitor service logs\n\
     tail -f \\\n\
@@ -135,6 +148,7 @@ RUN echo '#!/bin/bash\n\
 # Expose ports
 EXPOSE 5432
 EXPOSE 8501
+EXPOSE 11434
 
 # Set working directory
 WORKDIR /app
