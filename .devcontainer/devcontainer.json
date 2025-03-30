@@ -6,30 +6,7 @@
 		8501, // Streamlit
 		11434 // Ollama
 	],
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-python.python",
-				"ms-python.vscode-pylance",
-				"ms-azuretools.vscode-docker",
-				"mtxr.sqltools",
-				"mtxr.sqltools-driver-pg"
-			],
-			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"python.linting.enabled": true,
-				"python.formatting.provider": "black",
-				"editor.formatOnSave": true,
-				"terminal.integrated.automationProfile.linux": {
-					"path": "/bin/bash"
-				}
-			}
-		}
-	},
-	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
+	"postCreateCommand": "echo 'source /root/.bashrc' >> /root/.bash_profile",
 	"remoteUser": "root",
-	"postStartCommand": {
-		"server-start": "bash -c 'apt-get update && apt-get install -y procps && nohup service postgresql start </dev/null > /dev/null 2>&1 & sleep 2; killall ollama 2>/dev/null || true; nohup ollama serve > /tmp/ollama.log 2>&1 & sleep 2; exit 0'",
-		"keep-terminal-open": "bash -c 'echo \"Container is ready! Services are running in the background.\" && exec bash'"
-	}
+	"postStartCommand": "bash -c 'service postgresql start && until pg_isready ; do sleep 1; done && echo \"PostgreSQL is ready\"'"
 }
