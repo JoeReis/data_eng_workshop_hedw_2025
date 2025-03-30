@@ -51,8 +51,7 @@ RUN pip install --no-cache-dir \
     black \
     flake8 \
     pylint \
-    ipython \
-    jupyterlab
+    ipython
 
 # Install DuckDB CLI
 RUN if [ "$(uname -m)" = "aarch64" ]; then \
@@ -111,16 +110,12 @@ RUN echo '#!/bin/bash\n\
     \n\
     echo "Starting Streamlit..."\n\
     if [ -f "/workspace/app.py" ]; then\n\
-    streamlit run /workspace/app.py &\n\
+    streamlit run /workspace/app.py --server.address=0.0.0.0 &\n\
     else\n\
     echo "Welcome to the Data Stack!" > /app/app.py\n\
-    streamlit run /app/app.py &\n\
+    streamlit run /app/app.py --server.address=0.0.0.0 &\n\
     fi\n\
     wait_for_service 8501 "Streamlit"\n\
-    \n\
-    # Start JupyterLab\n\
-    echo "Starting JupyterLab..."\n\
-    jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root &\n\
     \n\
     echo "All services are running!"\n\
     echo "======================"\n\
@@ -128,7 +123,6 @@ RUN echo '#!/bin/bash\n\
     echo "PostgreSQL: localhost:5432 (User: root, Password: root)"\n\
     echo "DuckDB: Use '\''duck'\'' command in terminal"\n\
     echo "Streamlit: localhost:8501"\n\
-    echo "JupyterLab: localhost:8888"\n\
     echo "======================"\n\
     \n\
     # Monitor service logs\n\
@@ -141,7 +135,6 @@ RUN echo '#!/bin/bash\n\
 # Expose ports
 EXPOSE 5432
 EXPOSE 8501
-EXPOSE 8888
 
 # Set working directory
 WORKDIR /app
