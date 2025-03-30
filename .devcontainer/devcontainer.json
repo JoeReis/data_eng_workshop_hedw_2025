@@ -5,9 +5,9 @@
         5432, // PostgreSQL
         8501, // Streamlit
         11434, // Ollama
-        4213 // DuckDB UI
+        4213  // DuckDB UI
     ],
     "postCreateCommand": "echo 'source /root/.bashrc' >> /root/.bash_profile",
     "remoteUser": "root",
-    "postStartCommand": "bash -c 'service postgresql start && until pg_isready ; do sleep 1; done && echo \"PostgreSQL is ready\" && if [ -f \"/streamlit/app.py\" ]; then nohup streamlit run /workspace/app.py --server.address=0.0.0.0 --server.port=8501 > /tmp/streamlit.log 2>&1 & else echo \"Streamlit app not found.\"; fi'"
+    "postStartCommand": "bash -c 'set -euxo pipefail; service postgresql start; until pg_isready; do sleep 1; done; echo \"PostgreSQL is ready\"; if [ -f \"/streamlit/app.py\" ]; then nohup streamlit run /workspace/app.py --server.address=0.0.0.0 --server.port=8501 > /tmp/streamlit.log 2>&1 & else echo \"Streamlit app not found.\"; fi; echo \"Preloading llama3.2 model...\"; ollama pull llama3.2 | tee /tmp/ollama.log; echo \"Starting Ollama service...\"; nohup ollama serve llama3.2 > /tmp/ollama_serve.log 2>&1 & while !nc -z localhost 11434; do echo \"Waiting for Ollama...\"; sleep 1; done; echo \"Ollama is ready\"; exit 0'"
 }
