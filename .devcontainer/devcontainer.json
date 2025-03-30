@@ -1,12 +1,12 @@
 {
-	"name": "Data Stack Dev Container",
-	"dockerFile": "../Dockerfile",
-	"forwardPorts": [
-		5432, // PostgreSQL
-		8501, // Streamlit
-		11434 // Ollama
-	],
-	"postCreateCommand": "echo 'source /root/.bashrc' >> /root/.bash_profile",
-	"remoteUser": "root",
-	"postStartCommand": "bash -c 'service postgresql start && until pg_isready ; do sleep 1; done && echo \"PostgreSQL is ready\"'"
+    "name": "Data Stack Dev Container",
+    "dockerFile": "../Dockerfile",
+    "forwardPorts": [
+        5432, // PostgreSQL
+        8501, // Streamlit
+        11434 // Ollama
+    ],
+    "postCreateCommand": "echo 'source /root/.bashrc' >> /root/.bash_profile",
+    "remoteUser": "root",
+    "postStartCommand": "bash -c 'service postgresql start && until pg_isready ; do sleep 1; done && echo \"PostgreSQL is ready\" && if [ -f \"/streamlit/app.py\" ]; then nohup streamlit run /workspace/app.py --server.address=0.0.0.0 --server.port=8501 > /tmp/streamlit.log 2>&1 & else echo \"Streamlit app not found.\"; fi'"
 }
