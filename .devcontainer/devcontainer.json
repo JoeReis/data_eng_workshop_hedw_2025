@@ -25,5 +25,5 @@
 	},
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
-	"postStartCommand": "bash -c 'apt-get update && apt-get install -y procps && service postgresql start; until pg_isready ; do sleep 1; done; ollama serve > /tmp/ollama.log 2>&1 &'"
+	"postStartCommand": "bash -c 'apt-get update && apt-get install -y procps && service postgresql start; until pg_isready ; do sleep 1; done; killall ollama 2>/dev/null || true; ollama serve > /tmp/ollama.log 2>&1 & sleep 3'"
 }
