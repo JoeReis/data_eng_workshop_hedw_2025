@@ -29,7 +29,7 @@
 	"postCreateCommand": "echo 'source ~/.bashrc' >> ~/.bash_profile",
 	"remoteUser": "root",
 	"postStartCommand": {
-		"server-start": "bash -c 'apt-get update && apt-get install -y procps && nohup service postgresql start </dev/null & sleep 2; killall ollama 2>/dev/null || true; ollama serve > /tmp/ollama.log 2>&1 & sleep 2'",
+		"server-start": "bash -c 'apt-get update && apt-get install -y procps && nohup service postgresql start </dev/null > /dev/null 2>&1 & sleep 2; killall ollama 2>/dev/null || true; nohup ollama serve > /tmp/ollama.log 2>&1 & sleep 2; exit 0'",
 		"keep-terminal-open": "bash -c 'echo \"Container is ready! Services are running in the background.\" && exec bash'"
 	}
 }
