@@ -4,7 +4,8 @@
     "forwardPorts": [
         5432, // PostgreSQL
         8501, // Streamlit
-        11434 // Ollama
+        11434, // Ollama
+        4213 // DuckDB UI
     ],
     "postCreateCommand": "echo 'source /root/.bashrc' >> /root/.bash_profile",
     "remoteUser": "root",
