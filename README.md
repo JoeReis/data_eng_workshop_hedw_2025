@@ -6,7 +6,7 @@ You will:
 
 - Create tables and data in a Postgres database.
 - Extract data from the Postgres source database.
-- Ingest data efficiently using Data Load Toll (dlt).
+- Ingest data efficiently using Data Load Tool (dlt).
 - Store and manage data within DuckDB.
 - Develop a Kimball-style dimensional model using SQL.
 - Serve the modeled data interactively via a Streamlit application.
