@@ -46,11 +46,11 @@ Each step contains descriptions, hints, and blanks for you to fill in with code.
 
 ## Source Systems
 
-postgres
+In this lab, we'll use PostgresSQL as our source database. PostgreSQL (often referred to as Postgres) is a powerful, open-source relational database management system (RDBMS) known for its reliability, feature richness, and standards compliance. Some call it the "Swiss Army Knife" of databases, due to its vast extension ecosystem. Postgres organizes data into tables with rows and columns, and allows you to query and manipulate that data using SQL (Structured Query Language). Postgres is designed to handle everything from small single-machine applications to large-scale, multi-user systems, and it supports advanced features like full-text search, custom data types, JSON support, and transactional integrity. Because of its flexibility and performance, Postgres is widely used in both traditional and modern data architectures as a source system for analytical pipelines. For our purposes, we'll use Postgres as a typical OLTP database that stores various records related to enrollment, students, professors, and so on.
 
-create tables
+### Create Tables and Load Data
 
-load data
+create tables and load table
 
 query
 
