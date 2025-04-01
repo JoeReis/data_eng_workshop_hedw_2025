@@ -56,7 +56,8 @@ Postgres Database Creation
 
 1. Open the Postgres command line interface (cli). In the command li`ne, type `psql -U postgres`
 2. Next, let's create the database. `CREATE DATABASE university;`
-3. Connect to the university database `\c university;`
+3. Confirm the database is created `\l`
+4. Connect to the university database `\c university;`
 
 Create Tables
 

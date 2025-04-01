@@ -148,6 +148,7 @@ RUN echo '#!/bin/bash\n\
 # Expose ports
 EXPOSE 5432
 EXPOSE 8501
+EXPOSE 4213
 EXPOSE 11434
 
 # Set working directory
