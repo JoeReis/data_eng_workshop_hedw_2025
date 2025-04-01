@@ -1,4 +1,3 @@
-
 -- === DIMENSION TABLE MIGRATIONS WITH SCD TYPE 2 ===
 
 -- STUDENTS (SCD Type 2)
@@ -17,7 +16,7 @@ SELECT
     CURRENT_TIMESTAMP AS effective_date,
     NULL AS end_date,
     TRUE AS is_current
-FROM students s;
+FROM staging.students s;
 
 -- COURSES (SCD Type 2)
 INSERT INTO serving.dim_courses (
@@ -34,7 +33,7 @@ SELECT
     CURRENT_TIMESTAMP AS effective_date,
     NULL AS end_date,
     TRUE AS is_current
-FROM courses c;
+FROM staging.courses c;
 
 -- PROFESSORS (SCD Type 2)
 INSERT INTO serving.dim_professors (
@@ -51,12 +50,15 @@ SELECT
     CURRENT_TIMESTAMP AS effective_date,
     NULL AS end_date,
     TRUE AS is_current
-FROM professors p;
+FROM staging.professors p;
 
 -- === DATE DIMENSION ===
 
--- Generate a date range for the entire year of 2024
+-- Generate a date range for 2024-2026
 INSERT INTO serving.dim_date (date, day, month, year, quarter, semester)
+WITH date_series AS (
+  SELECT unnest(generate_series(DATE '2024-01-01', DATE '2026-12-31', INTERVAL '1 day')) AS d
+)
 SELECT
     d,
     EXTRACT(day FROM d),
@@ -67,7 +69,7 @@ SELECT
         WHEN EXTRACT(month FROM d) BETWEEN 1 AND 6 THEN 'Spring'
         ELSE 'Fall'
     END AS semester
-FROM generate_series(DATE '2024-01-01', DATE '2024-12-31', INTERVAL 1 day) AS d;
+FROM date_series;
 
 -- === FACT TABLE MIGRATIONS ===
 
@@ -81,9 +83,9 @@ SELECT
     dc.course_sk,
     e.enrollment_date AS date_sk,
     CURRENT_TIMESTAMP AS created_at
-FROM enrollments e
-JOIN dim_students ds ON e.student_id = ds.student_id AND ds.is_current = TRUE
-JOIN dim_courses dc ON e.course_id = dc.course_id AND dc.is_current = TRUE;
+FROM staging.enrollments e
+JOIN serving.dim_students ds ON e.student_id = ds.student_id AND ds.is_current = TRUE
+JOIN serving.dim_courses dc ON e.course_id = dc.course_id AND dc.is_current = TRUE;
 
 -- COURSE ASSIGNMENTS FACT
 INSERT INTO serving.fact_course_assignments (
@@ -95,6 +97,6 @@ SELECT
     dp.professor_sk,
     ca.assigned_date AS date_sk,
     CURRENT_TIMESTAMP AS created_at
-FROM course_assignments ca
-JOIN dim_courses dc ON ca.course_id = dc.course_id AND dc.is_current = TRUE
-JOIN dim_professors dp ON ca.professor_id = dp.professor_id AND dp.is_current = TRUE;
+FROM staging.course_assignments ca
+JOIN serving.dim_courses dc ON ca.course_id = dc.course_id AND dc.is_current = TRUE
+JOIN serving.dim_professors dp ON ca.professor_id = dp.professor_id AND dp.is_current = TRUE;

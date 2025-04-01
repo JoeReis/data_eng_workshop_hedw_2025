@@ -164,6 +164,17 @@ Create a new schema in DuckDB `CREATE SCHEMA serving;`
 
 [ scd ]
 
+If you have an error loading tables, truncate and start over
+
+TRUNCATE TABLE serving.fact_enrollments;
+TRUNCATE TABLE serving.fact_course_assignments;
+
+-- Then truncate dimension tables
+TRUNCATE TABLE serving.dim_students;
+TRUNCATE TABLE serving.dim_courses; 
+TRUNCATE TABLE serving.dim_professors;
+TRUNCATE TABLE serving.dim_date;
+
 ## Serving Data for Analytics and AI
 
 🧹 Cleanup (Optional)
