@@ -124,10 +124,18 @@ DuckDB is a lightweight, high-performance analytical database that fits perfectl
 Because DuckDB is extremely simple to use, we won't spend a ton of time going through the details. Instead, let's get familiar with DuckDB via the command line.
 
 1. Let's open up DuckDB by typing `duckdb`
-2. 
+2. Generate a simple query `SELECT * FROM generate_series(5);`
+3. Find the length of a string `SELECT upper('duckdb is cool'), length('how long is this?');`
+4. Do a little math `SELECT 42 * 17 AS answer;`
+5. Generate a date range `SELECT * FROM generate_series(date '2025-01-01', date '2025-01-10', interval 1 day);`
+6. JSON parsing from raw strings `SELECT json_extract('{"name": "Tina", "role": "engineer"}', '$.role') AS role;`
 
+Exit DuckDB by typing `.exit`
+
+Ok, let's do something more interesting with DuckDB and load some data into it.
 
 ## Data Ingestion
+
 
 
 ## Data Modeling and Transformation
