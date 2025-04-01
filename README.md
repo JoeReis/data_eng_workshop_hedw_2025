@@ -136,7 +136,7 @@ Ok, let's do something more interesting with DuckDB and load some data into it.
 
 ## Data Ingestion
 
-Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB.
+Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB. 
 
 In the terminal, type `python dlt_pipeline.py`
 
