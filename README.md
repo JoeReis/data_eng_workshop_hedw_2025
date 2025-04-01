@@ -136,7 +136,7 @@ Ok, let's do something more interesting with DuckDB and load some data into it.
 
 ## Data Ingestion
 
-Let's use dlt to load data from Postgres to DuckDB.
+Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB.
 
 In the terminal, type `python dlt_pipeline.py`
 
@@ -146,9 +146,17 @@ Let's see what's in this database. Thankfully DuckDB offers a new handy UI to in
 
 In the terminal, type `duckdb -ui`
 
+`SELECT * FROM stg_university_data.students;`
 
+[  go through some examples of dlt refresh and increamtanl load with insert ]
 
 ## Data Modeling and Transformation
+
+[ create a new layer in duckdb - serving with kimball ]
+
+[  go through some examples of dlt refresh and increamtanl load with update ]
+
+[ scd ]
 
 ## Serving Data for Analytics and AI
 
