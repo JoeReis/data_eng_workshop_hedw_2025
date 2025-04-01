@@ -97,13 +97,34 @@ Ok. Our source database is set up. Let's next move to Storage.
 
 ## Storage
 
-There are too many storage options to count when it comes to consuming data from upstream OLTP databases, streams, and more. In this example, we'll use the very popular DuckDB database.
+When it comes to upstream OLAP databases, there are nearly countless options on the market. In this lab, we're using DuckDB, a very popular and lightweight OLAP database.
 
+🦆 **Why are we using DuckDB in this lab?**
 
+DuckDB is a lightweight, high-performance analytical database that fits perfectly into modern data engineering workflows. Here’s why it’s ideal for this lab:
 
-duckdb
+- **Ease of Use**: DuckDB runs in-process, meaning no server setup or maintenance is required. You can use it directly from your Python scripts or notebooks.
+- **Speed**: It’s optimized for analytical queries, enabling fast processing of large datasets.
+- **Portability**: DuckDB is self-contained and works across platforms, making it easy to integrate into various environments.
+- **SQL Support**: It supports advanced SQL features, allowing you to perform complex transformations and modeling.
+- **Scalability**: While lightweight, DuckDB can handle substantial data volumes, making it suitable for both prototyping and production use cases.
 
-what's the difference?
+🔍 Key Features of DuckDB
+- **Fast analytics**: DuckDB is optimized for OLAP (analytical) workloads and columnar data access.
+- **In-process**: It runs inside your Python script or notebook—no need to run a separate database server.
+- **Easy integration**: Works great with tools like Pandas, dbt, and even Excel or Parquet files.
+- **Portable**: The whole database can be saved as a single .duckdb file and moved around easily.
+
+🛠️ In this lab, DuckDB plays the role of a lightweight analytical database where we:
+- Load and store data ingested from Postgres using dlt.
+- Build dimensional models (like fact and dimension tables) using SQL.
+- Query and analyze the data quickly and interactively.
+- Power visualizations and LLM-based interfaces without needing a full database server.
+
+Because DuckDB is extremely simple to use, we won't spend a ton of time going through the details. Instead, let's get familiar with DuckDB via the command line.
+
+1. Let's open up DuckDB by typing `duckdb`
+2. 
 
 
 ## Data Ingestion
