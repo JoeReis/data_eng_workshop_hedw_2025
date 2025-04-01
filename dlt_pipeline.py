@@ -11,7 +11,7 @@ def load_university_pipeline():
     pipeline = dlt.pipeline(
         pipeline_name="university_data",
         destination="duckdb",
-        dataset_name="stg_university_data",
+        dataset_name="staging",
     )
     
     load_info = pipeline.run(source)
