@@ -55,10 +55,10 @@ CREATE TABLE serving.fact_enrollments (
     student_sk INTEGER,
     course_sk INTEGER,
     date_sk DATE,
-    created_at TIMESTAMP,
     FOREIGN KEY(student_sk) REFERENCES serving.dim_students(student_sk),
     FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
-    FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date)
+    FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date),
+    created_at TIMESTAMP
 );
 
 -- FACT COURSE ASSIGNMENTS
@@ -67,8 +67,8 @@ CREATE TABLE serving.fact_course_assignments (
     course_sk INTEGER,
     professor_sk INTEGER,
     date_sk DATE,
-    created_at TIMESTAMP,
     FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
     FOREIGN KEY(professor_sk) REFERENCES serving.dim_professors(professor_sk),
-    FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date)
+    FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date),
+    created_at TIMESTAMP
 );
