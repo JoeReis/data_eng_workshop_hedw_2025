@@ -29,7 +29,7 @@ By the end of this lab, you will:
 - SQL – Data transformation and modeling
 - Python – Pipeline and app development
 - Streamlit – Interactive data application
-- Ollama + LangChain – Text-to-SQL interface via LLMs
+- Ollama + LLama3.2 + LangChain – Text-to-SQL interface via LLMs
 
 🖥️ Environment Setup
 
@@ -44,17 +44,62 @@ Note - there might be a small cost to run GitHub Codespaces.
 
 Each step contains descriptions, hints, and blanks for you to fill in with code.
 
+_WARNING_ - Whatever you do, do _NOT_ exit codespaces or shutdown ports that are running. Doing so will force you to start the entire lab over.
+
 ## Source Systems
 
 In this lab, we'll use PostgresSQL as our source database. PostgreSQL (often referred to as Postgres) is a powerful, open-source relational database management system (RDBMS) known for its reliability, feature richness, and standards compliance. Some call it the "Swiss Army Knife" of databases, due to its vast extension ecosystem. Postgres organizes data into tables with rows and columns, and allows you to query and manipulate that data using SQL (Structured Query Language). Postgres is designed to handle everything from small single-machine applications to large-scale, multi-user systems, and it supports advanced features like full-text search, custom data types, JSON support, and transactional integrity. Because of its flexibility and performance, Postgres is widely used in both traditional and modern data architectures as a source system for analytical pipelines. For our purposes, we'll use Postgres as a typical OLTP database that stores various records related to enrollment, students, professors, and so on.
 
 ### Create Tables and Load Data
 
-create tables and load table
+Postgres Database Creation
 
-query
+1. Open the Postgres command line interface (cli). In the command li`ne, type `psql -U postgres`
+2. Next, let's create the database. `CREATE DATABASE university;`
+3. Connect to the university database `\c university;`
+
+Create Tables
+
+1. Open the pg_scripts folder
+2. Open the create_tables_pg.sql file. Select all and copy.
+3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
+4. Verify the tables are in Postgres using the `\dt` command.
+
+Load Data
+
+1. In the pg_scripts folder, open the insert_data_pg.sql file.
+2. Select all and copy.
+3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
+
+Let's verify the data is in the database with a couple of sample queries.
+
+This query should show 100 students.
+
+`SELECT COUNT(*) FROM students;`
+
+And this query 
+
+`SELECT * FROM courses LIMIT 5;`
+
+should list the following classes
+
+- Intro to Computer Science
+- Advanced English Literature
+- General Biology
+- Principles of Economics
+- Linear Algebra
+
+You can choose to exit the Postgres terminal or keep the terminal tab open for now.
+
+To exit the Postgres terminal, type `\q`.
+
+Ok. Our source database is set up. Let's next move to Storage.
 
 ## Storage
+
+There are too many storage options to count when it comes to consuming data from upstream OLTP databases, streams, and more. In this example, we'll use the very popular DuckDB database.
+
+
 
 duckdb
 
