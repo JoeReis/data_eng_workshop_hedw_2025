@@ -148,7 +148,7 @@ In the terminal, type `duckdb -ui`
 
 `SELECT * FROM stg_university_data.students;`
 
-[  go through some examples of dlt refresh and increamtanl load with insert ]
+[  go through some examples of dlt refresh and incremental load with insert ]
 
 ## Data Modeling and Transformation
 
