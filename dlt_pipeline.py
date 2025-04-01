@@ -7,7 +7,7 @@ def load_university_pipeline():
     # source.professors.apply_hints(incremental=dlt.sources.incremental("created_at")) #incremental load
     
     pipeline = dlt.pipeline(
-        pipeline_name="university_data_pipeline", #duckdb database name
+        pipeline_name="university_data", #duckdb database name
         destination='duckdb',
         dataset_name="stg_university_data", #staging zone
     )

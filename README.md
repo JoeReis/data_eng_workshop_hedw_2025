@@ -136,6 +136,16 @@ Ok, let's do something more interesting with DuckDB and load some data into it.
 
 ## Data Ingestion
 
+Let's use dlt to load data from Postgres to DuckDB.
+
+In the terminal, type `python dlt_pipeline.py`
+
+This will create a DuckDB database called university_data.duckdb
+
+Let's see what's in this database. Thankfully DuckDB offers a new handy UI to inspect the data in DuckDB.
+
+In the terminal, type `duckdb -ui`
+
 
 
 ## Data Modeling and Transformation
