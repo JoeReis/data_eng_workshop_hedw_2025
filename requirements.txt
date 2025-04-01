@@ -15,6 +15,7 @@ langgraph-checkpoint
 langgraph-prebuilt        
 langgraph-sdk             
 langsmith
+numpy
 ollama           
 pandas
 psycopg2-binary
