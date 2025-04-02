@@ -207,9 +207,17 @@ Notice the dropdown menu in the top right of the browser. Click it and look arou
 
 Hello world is nice, but pretty boring. Here, we'll look at various ways to use Streamlit. The big thing to notice is how easy it is to build data-powered applications in Streamlit.
 
+Open the file streamlit_app/basics.py
+
 From your terminal in the project directory, type: `streamlit run streamlit_app/basics.py`
 
-### Let's Analyze the Star Schema
+Let's walk through the exercises.
+
+The solutions to these exercises are located at streamlit_app/basics_solutions.py
+
+Now that you've got a good grasp of Streamlit basics, let's connect our streamlit application to our data warehouse.
+
+### Let's Analyze our Data Warehouse
 
 
 
