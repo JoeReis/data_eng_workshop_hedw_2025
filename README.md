@@ -14,7 +14,7 @@ You will:
 
 This lab is part of a broader full-day data engineering workshop.
 
-🎯 Learning Goals
+Learning Goals
 
 By the end of this lab, you will:
 - Understand how to use dlt to extract and load data into DuckDB
@@ -22,7 +22,7 @@ By the end of this lab, you will:
 - Use Streamlit to build a simple data app
 - Use AI tools LangChain and Ollama to generate SQL from natural language
 
-🧰 Tools & Technologies
+Tools & Technologies
 - PostgreSQL – Source system
 - DLT (Data Load Tool) – Ingestion framework
 - DuckDB – Analytical storage engine
@@ -31,7 +31,7 @@ By the end of this lab, you will:
 - Streamlit – Interactive data application
 - Ollama + LLama3.2 + LangChain – Text-to-SQL interface via LLMs
 
-🖥️ Environment Setup
+Environment Setup
 
 This workshop runs entirely in GitHub Codespaces. No local setup is required.
 Note - there might be a small cost to run GitHub Codespaces.
@@ -40,7 +40,7 @@ Note - there might be a small cost to run GitHub Codespaces.
 2.	Click “Code” > “Codespaces” > “Create codespace on main”.
 3.	Wait for the Codespace to initialize. This should take a few minutes to spin up.
 
-🧪 Lab Instructions
+Lab Instructions
 
 Each step contains descriptions, hints, and blanks for you to fill in with code.
 
@@ -54,7 +54,7 @@ In this lab, we'll use PostgresSQL as our source database. PostgreSQL (often ref
 
 Postgres Database Creation
 
-1. Open the Postgres command line interface (cli). In the command li`ne, type `psql -U postgres`
+1. Open the Postgres command line interface (cli). In the command line, type `psql -U postgres`
 2. Next, let's create the database. `CREATE DATABASE university;`
 3. Confirm the database is created `\l`
 4. Connect to the university database `\c university;`
@@ -62,13 +62,13 @@ Postgres Database Creation
 Create Tables
 
 1. Open the pg_scripts folder
-2. Open the create_tables_pg.sql file. Select all and copy.
+2. Open the `create_tables_pg.sql` file. Select all and copy.
 3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
 4. Verify the tables are in Postgres using the `\dt` command.
 
 Load Data
 
-1. In the pg_scripts folder, open the insert_data_pg.sql file.
+1. In the pg_scripts folder, open the `insert_data_pg.sql` file.
 2. Select all and copy.
 3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
 
@@ -110,13 +110,13 @@ DuckDB is a lightweight, high-performance analytical database that fits perfectl
 - **SQL Support**: It supports advanced SQL features, allowing you to perform complex transformations and modeling.
 - **Scalability**: While lightweight, DuckDB can handle substantial data volumes, making it suitable for both prototyping and production use cases.
 
-🔍 Key Features of DuckDB
+Key Features of DuckDB
 - **Fast analytics**: DuckDB is optimized for OLAP (analytical) workloads and columnar data access.
 - **In-process**: It runs inside your Python script or notebook—no need to run a separate database server.
 - **Easy integration**: Works great with tools like Pandas, dbt, and even Excel or Parquet files.
 - **Portable**: The whole database can be saved as a single .duckdb file and moved around easily.
 
-🛠️ In this lab, DuckDB plays the role of a lightweight analytical database where we:
+In this lab, DuckDB plays the role of a lightweight analytical database where we:
 - Load and store data ingested from Postgres using dlt.
 - Build dimensional models (like fact and dimension tables) using SQL.
 - Query and analyze the data quickly and interactively.
@@ -139,7 +139,7 @@ Ok, let's do something more interesting with DuckDB and load some data into it.
 
 Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB.
 
-1. Open the file dlt_pipeline.py
+1. Open the file `dlt_pipeline.py`
 2. 
 
 In the terminal, type `python dlt_pipeline.py`
@@ -207,27 +207,35 @@ Notice the dropdown menu in the top right of the browser. Click it and look arou
 
 Hello world is nice, but pretty boring. Here, we'll look at various ways to use Streamlit. The big thing to notice is how easy it is to build data-powered applications in Streamlit.
 
-Open the file streamlit_app/basics.py
+Open the file `streamlit_app/basics.py`
 
 From your terminal in the project directory, type: `streamlit run streamlit_app/basics.py`
 
 Let's walk through the exercises.
 
-The solutions to these exercises are located at streamlit_app/basics_solutions.py
+The solutions to these exercises are located at `streamlit_app/basics_solutions.py`
 
 Now that you've got a good grasp of Streamlit basics, let's connect our streamlit application to our data warehouse.
 
 ### Let's Analyze our Data Warehouse
 
-Let's open the DuckDB console
+Here, we're going to look at more complex queries and data applications in our data warehouse.
 
-type this to confirm the various schemas and tables;
+Let’s begin with a simple ranking. This query will show the five courses with the highest number of student enrollments.
 
-```SELECT table_schema, table_name
-FROM information_schema.tables
-ORDER BY table_schema, table_name;```
+`SELECT c.course_title, COUNT(*) AS student_count
+FROM fact_enrollments f
+JOIN dim_courses c ON f.course_sk = c.course_sk
+WHERE c.course_title = 'Intro to Computer Science'
+GROUP BY c.course_title;`
 
+Next, let's look how we can filter to the course to determine the number of students per course
 
+First, close Streamlit (Crtl C), then type `streamlit run streamlit_app/duckdb_streamlit.py`
+
+Also, open the file `streamlit_app/duckdb_streamlit.py`
+
+[ make this a fill in the blanks example ]
 
 
 ## AI For analysis and BI
