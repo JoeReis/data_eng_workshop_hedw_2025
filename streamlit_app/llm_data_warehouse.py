@@ -1,30 +1,68 @@
 import streamlit as st
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
+from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain
-from langchain.sql_database import SQLDatabase
 from langchain_ollama.llms import OllamaLLM
 from sqlalchemy import create_engine
 import ast
 
-# Create a SQLAlchemy engine for DuckDB
-engine = create_engine("duckdb:///university_data.duckdb")
+# Use Streamlit's caching to avoid reloading the database and model
+@st.cache_resource
+def get_database():
+    engine = create_engine("duckdb:///university_data.duckdb")
+    # Only include the tables you need and limit sample rows to 0
+    return SQLDatabase(
+        engine, 
+        schema="serving", 
+        include_tables=["dim_students", "dim_courses", "dim_professors", "fact_enrollments"],
+        sample_rows_in_table_info=0
+    )
+
+@st.cache_resource
+def get_llm():
+    # Configure the LLM with performance-optimized parameters
+    return OllamaLLM(
+        model="llama3.2",
+        temperature=0,  # More deterministic (faster) responses
+        top_p=0.5,      # Sample from smaller probability mass (faster)
+        num_ctx=1024    # Smaller context window = faster processing
+    )
 
 st.title("LangChain with Streamlit")
 st.write("This is a simple Streamlit app that uses LangChain to generate queries for DuckDB.")
 
-# Initialize your model
-model = OllamaLLM(model="llama3.2")
+# Get cached resources
+db = get_database()
+model = get_llm()
 
-# Create a SQLDatabase object with the specified schema and tables.
-db = SQLDatabase(engine, schema="serving", include_tables=["dim_students"])
+# Create a minimal prompt that focuses on speed
+custom_prompt = """
+Given a question, write a simple DuckDB SQL query:
+1. Generate ONLY SELECT statements
+2. Use schema "serving"
+3. Keep queries simple and efficient
+4. The query should start with SELECT
 
-# Create the chain with more parameters for better control
-db_chain = SQLDatabaseChain.from_llm(
-    llm=model,
-    db=db,
-    verbose=True,
-    return_direct=True  # Return the result directly  # Set temperature to 0 for deterministic output
-)
+Tables: dim_students, dim_courses, dim_professors, fact_enrollments
+
+Question: {query}
+
+SQL Query: SELECT """
+
+PROMPT = PromptTemplate(input_variables=["query"], template=custom_prompt)
+
+# Cache the chain creation
+@st.cache_resource
+def get_chain():
+    return SQLDatabaseChain.from_llm(
+        llm=model,
+        db=db,
+        prompt=PROMPT,
+        verbose=False,  # Reduce logging for speed
+        return_direct=True
+    )
+
+db_chain = get_chain()
 
 st.title("Streamlit + LangChain + DuckDB Demo")
 st.write("Enter a natural language query to search your DuckDB database:")
@@ -32,46 +70,37 @@ st.write("Enter a natural language query to search your DuckDB database:")
 user_query = st.text_input("Your query:")
 
 if user_query:
-    st.write("Processing your query...")
-    try:
-        # Use the invoke method with a dictionary
-        result = db_chain.invoke({"query": user_query})
-        
-        # Get the result from the dictionary
-        raw_result = result.get("result", "")
-        
-        # Remove any unwanted leading prefix
-        if raw_result.lower().startswith("sql"):
-            raw_result = raw_result[3:].strip()
-        
-        # Clean approach to extract the value
+    # Show a spinner while processing
+    with st.spinner("Generating SQL and querying the database..."):
         try:
-            # Try to safely evaluate the string representation of the result
-            # This converts a string like "[(20,)]" to a Python list containing a tuple
-            parsed_result = ast.literal_eval(raw_result)
+            # Cache query results to avoid reprocessing the same queries
+            @st.cache_data(ttl=300)  # Cache for 5 minutes
+            def get_query_result(query):
+                return db_chain.invoke({"query": query})
             
-            if parsed_result and isinstance(parsed_result, list) and len(parsed_result) > 0:
-                # Extract the first value from the first tuple
-                value = parsed_result[0][0] if parsed_result[0] else None
-                
-                # Format the result in natural language
-                if "how many" in user_query.lower() and value is not None:
-                    formatted_result = f"There are {value} students in the database."
+            result = get_query_result(user_query)
+            raw_result = result.get("result", "")
+            
+            # Simplify result parsing
+            try:
+                # Try to format as a table if it looks like tabular data
+                if isinstance(raw_result, str) and raw_result.startswith('[') and raw_result.endswith(']'):
+                    parsed_result = ast.literal_eval(raw_result)
+                    if isinstance(parsed_result, list) and len(parsed_result) > 0:
+                        # Show as a table if multiple rows
+                        if len(parsed_result) > 1:
+                            # Convert to DataFrame if possible
+                            import pandas as pd
+                            df = pd.DataFrame(parsed_result)
+                            st.dataframe(df)
+                        else:
+                            st.write(f"Result: {parsed_result[0][0] if len(parsed_result[0]) == 1 else parsed_result[0]}")
+                    else:
+                        st.write(f"Result: {raw_result}")
                 else:
-                    formatted_result = f"Result: {value}"
-            else:
-                formatted_result = f"Result: {raw_result}"
-        except (ValueError, SyntaxError, TypeError):
-            # If parsing fails, just show the raw result
-            formatted_result = f"Result: {raw_result}"
-        
-        st.write("### Query Result")
-        st.write(formatted_result)
-        
-        # Optionally show the raw result
-        with st.expander("Raw response"):
-            st.write(result)
-            
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-        st.error(f"Error type: {type(e)}")  # This helps debug the exact errorhis helps debug the exact error
+                    st.write(f"Result: {raw_result}")
+            except:
+                st.write(f"Result: {raw_result}")
+                
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
