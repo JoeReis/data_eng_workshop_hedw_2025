@@ -237,12 +237,41 @@ Also, open the file `streamlit_app/duckdb_streamlit.py`
 
 [ make this a fill in the blanks example ]
 
+We've spent some time looking at data-powered applications. How about we look at AI-powered apps?
 
-## AI For analysis and BI
+## AI For Analysis and BI
 
-Ollama
+So far, we’ve explored how data powers analytics and applications — but what happens when we bring AI into the mix?
+
+Let’s shift gears and explore how Large Language Models (LLMs) can enhance analysis, generate insights, and even help us write SQL queries.
+
+### Run the LLM with Ollama
+
+Commercial LLMs are great if you want to interact with their version of the world they've been trained on. What happens if you want to run a model locally to query your internal data.
+
+Thankfully, Ollama provides a great service for downloading models and interacting with them.
+
+We’ll be using Llama 3.2, an open-source language model, to power our AI assistant.
+
+To start the model locally, just run:
 
 Open Llama3.2 `ollama run llama3.2`
+
+Ask Llama3.2 `why is the sky blue?`
+
+You'll probably get a response about molecules and gases interacting with sunlight. The responses will vary because LLMs are probabilistic.
+
+Hit `Ctrl D` to exit llama3.2
+
+### Let's Ask AI About Our Data Warehouse
+
+You saw LLama3.2. It's just an LLM, similar to what you interact with if you ask ChatGPT, Claude, or Gemini questions.
+
+The real power of LLMs is when they're working with YOUR data.
+
+
+
+
 
 
 
