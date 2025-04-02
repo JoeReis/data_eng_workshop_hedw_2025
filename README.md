@@ -269,7 +269,9 @@ You saw LLama3.2. It's just an LLM, similar to what you interact with if you ask
 
 The real power of LLMs is when they're working with YOUR data.
 
+From the terminal, open the file `llms/llm_data_warehouse.py`
 
+Let's look at what's going on.
 
 
 
