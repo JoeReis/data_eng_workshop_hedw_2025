@@ -219,6 +219,14 @@ Now that you've got a good grasp of Streamlit basics, let's connect our streamli
 
 ### Let's Analyze our Data Warehouse
 
+Let's open the DuckDB console
+
+type this to confirm the various schemas and tables;
+
+```SELECT table_schema, table_name
+FROM information_schema.tables
+ORDER BY table_schema, table_name;```
+
 
 
 
