@@ -47,6 +47,37 @@ def get_chain():
 
 db_chain = get_chain()
 
+# Add a function to fix common SQL syntax issues
+def fix_sql_syntax(sql_query):
+    if not isinstance(sql_query, str):
+        return sql_query
+        
+    # Fix incorrectly quoted schema.table references
+    import re
+    # Replace patterns like "schema.table" with schema.table
+    fixed_sql = re.sub(r'"([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)"', r'\1.\2', sql_query)
+    
+    # Extract only the SQL part (before any notes or explanations)
+    if ';' in fixed_sql:
+        fixed_sql = fixed_sql.split(';')[0] + ';'
+    
+    return fixed_sql.strip()
+
+# Update your prompt to be more explicit
+custom_prompt = """
+Given a question, write a simple DuckDB SQL query:
+1. Generate ONLY SELECT statements
+2. Always use schema name 'serving' before table names (example: serving.dim_courses, NOT "serving.dim_courses")
+3. Keep queries simple and efficient
+4. Do not put quotes around schema-qualified table names
+5. IMPORTANT: Your response should ONLY be the SQL query, with no explanations or notes
+
+Tables: serving.dim_students, serving.dim_courses, serving.dim_professors, serving.fact_enrollments
+
+Question: {query}
+
+SQL Query: """
+
 st.title("Streamlit + LangChain + DuckDB Demo")
 st.write("Enter a natural language query to search your DuckDB database:")
 
@@ -59,8 +90,27 @@ if user_query:
             # Create a simpler chain using run method
             @st.cache_data(ttl=300)
             def get_query_result(query):
-                # Use run() instead of invoke() - it handles input differently 
-                return db_chain.invoke(query)
+                # Get raw result from LLM
+                result = db_chain.invoke(query)
+                
+                # Show raw result in an expander
+                with st.expander("View raw LLM response"):
+                    st.text(result)
+                
+                # Fix any SQL syntax issues
+                if isinstance(result, str):
+                    fixed_sql = fix_sql_syntax(result)
+                    st.code(fixed_sql, language="sql")
+                    
+                    try:
+                        # Execute the fixed SQL
+                        with db.engine.connect() as conn:
+                            query_result = conn.execute(fixed_sql).fetchall()
+                            return query_result
+                    except Exception as e:
+                        st.error(f"SQL execution error: {e}")
+                        return f"Fixed SQL still has errors: {e}"
+                return result
             
             raw_result = get_query_result(user_query)
             
