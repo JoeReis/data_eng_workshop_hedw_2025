@@ -51,14 +51,19 @@ CREATE TABLE serving.dim_date (
 
 -- FACT ENROLLMENTS
 CREATE TABLE serving.fact_enrollments (
-    enrollment_sk BIGINT PRIMARY KEY,
-    student_sk INTEGER,
-    course_sk INTEGER,
-    date_sk DATE,
-    CONSTRAINT fk_student FOREIGN KEY(student_sk) REFERENCES serving.dim_students(student_sk),
-    CONSTRAINT fk_course FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
-    CONSTRAINT fk_date FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date),
-    created_at TIMESTAMP
+    -- Core Keys
+    enrollment_sk BIGINT PRIMARY KEY, -- Surrogate key for the enrollment fact
+    student_sk INTEGER NOT NULL,      -- Foreign key to dim_students (Ensured not null)
+    course_sk INTEGER NOT NULL,       -- Foreign key to dim_courses (Ensured not null)
+    date_sk DATE NOT NULL,            -- Foreign key to dim_date, likely enrollment date (Ensured not null)
+
+    -- Audit Columns
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP -- Timestamp when the record was created
+
+    -- Constraints (Renamed for clarity and consistency)
+    -- CONSTRAINT fk_enrollment_student FOREIGN KEY(student_sk) REFERENCES serving.dim_students(student_sk),
+    -- CONSTRAINT fk_enrollment_course FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
+    -- CONSTRAINT fk_enrollment_date FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date)
 );
 
 -- FACT COURSE ASSIGNMENTS
@@ -67,8 +72,12 @@ CREATE TABLE serving.fact_course_assignments (
     course_sk INTEGER,
     professor_sk INTEGER,
     date_sk DATE,
-    CONSTRAINT fk_student FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
-    CONSTRAINT fk_course FOREIGN KEY(professor_sk) REFERENCES serving.dim_professors(professor_sk),
-    CONSTRAINT fk_date FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date),
-    created_at TIMESTAMP
+
+    -- Audit Columns
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP -- Timestamp when the record was created
+    -- Renamed constraints for uniqueness and clarity:
+    -- CONSTRAINT fk_assignment_course FOREIGN KEY(course_sk) REFERENCES serving.dim_courses(course_sk),
+    -- CONSTRAINT fk_assignment_professor FOREIGN KEY(professor_sk) REFERENCES serving.dim_professors(professor_sk),
+    -- CONSTRAINT fk_assignment_date FOREIGN KEY(date_sk) REFERENCES serving.dim_date(date),
+    
 );
