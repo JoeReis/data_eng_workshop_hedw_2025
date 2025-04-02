@@ -35,21 +35,21 @@ st.write("This is a simple Streamlit app that uses LangChain to generate queries
 db = get_database()
 model = get_llm()
 
-# Create a minimal prompt that focuses on speed
+# Create a minimal prompt that focuses on speed - with table_info parameter
 custom_prompt = """
 Given a question, write a simple DuckDB SQL query:
 1. Generate ONLY SELECT statements
-2. Use schema "serving"
+2. Use schema "serving" 
 3. Keep queries simple and efficient
 4. The query should start with SELECT
 
-Tables: dim_students, dim_courses, dim_professors, fact_enrollments
+Tables: {table_info}
 
 Question: {query}
 
 SQL Query: SELECT """
 
-PROMPT = PromptTemplate(input_variables=["query"], template=custom_prompt)
+PROMPT = PromptTemplate(input_variables=["query", "table_info"], template=custom_prompt)
 
 # Cache the chain creation
 @st.cache_resource
@@ -76,31 +76,39 @@ if user_query:
             # Cache query results to avoid reprocessing the same queries
             @st.cache_data(ttl=300)  # Cache for 5 minutes
             def get_query_result(query):
-                return db_chain.invoke({"query": query})
+                # This is the key fix - provide both required parametersuired parameters
+                return db_chain.invoke({    return db_chain.invoke({
+                    "query": query,
+                    "table_info": db.get_table_info()  # Get table info from the databasefo()  # Get table info from the database
+                })    })
             
-            result = get_query_result(user_query)
-            raw_result = result.get("result", "")
+            result = get_query_result(user_query)lt = get_query_result(user_query)
+            raw_result = result  # Direct result since return_direct=Truee
             
             # Simplify result parsing
             try:
-                # Try to format as a table if it looks like tabular data
-                if isinstance(raw_result, str) and raw_result.startswith('[') and raw_result.endswith(']'):
-                    parsed_result = ast.literal_eval(raw_result)
-                    if isinstance(parsed_result, list) and len(parsed_result) > 0:
+                # Try to format as a table if it looks like tabular datae tabular data
+                if isinstance(raw_result, str) and raw_result.startswith('[') and raw_result.endswith(']'): raw_result.startswith('[') and raw_result.endswith(']'):
+                    parsed_result = ast.literal_eval(raw_result)t)
+                    if isinstance(parsed_result, list) and len(parsed_result) > 0:, list) and len(parsed_result) > 0:
                         # Show as a table if multiple rows
-                        if len(parsed_result) > 1:
-                            # Convert to DataFrame if possible
+                        if len(parsed_result) > 1:) > 1:
+                            # Convert to DataFrame if possible Convert to DataFrame if possible
                             import pandas as pd
-                            df = pd.DataFrame(parsed_result)
+                            df = pd.DataFrame(parsed_result)   df = pd.DataFrame(parsed_result)
                             st.dataframe(df)
-                        else:
-                            st.write(f"Result: {parsed_result[0][0] if len(parsed_result[0]) == 1 else parsed_result[0]}")
-                    else:
-                        st.write(f"Result: {raw_result}")
-                else:
-                    st.write(f"Result: {raw_result}")
+                        else:   else:
+                            st.write(f"Result: {parsed_result[0][0] if len(parsed_result[0]) == 1 else parsed_result[0]}")d_result[0][0] if len(parsed_result[0]) == 1 else parsed_result[0]}")
+                    else: else:
+                        st.write(f"Result: {raw_result}")esult}")
+                else:else:
+                    st.write(f"Result: {raw_result}")"Result: {raw_result}")
             except:
-                st.write(f"Result: {raw_result}")
+
+
+
+
+            st.error(f"An error occurred: {e}")        except Exception as e:                                st.write(f"Result: {raw_result}")                st.write(f"Result: {raw_result}")
                 
         except Exception as e:
             st.error(f"An error occurred: {e}")
