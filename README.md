@@ -46,7 +46,7 @@ Each step contains descriptions, hints, and blanks for you to fill in with code.
 
 _WARNING_ - Whatever you do, do _NOT_ exit codespaces or shutdown ports that are running. Doing so will force you to start the entire lab over.
 
-## Source Systems
+# Source Systems
 
 In this lab, we'll use PostgresSQL as our source database. PostgreSQL (often referred to as Postgres) is a powerful, open-source relational database management system (RDBMS) known for its reliability, feature richness, and standards compliance. Some call it the "Swiss Army Knife" of databases, due to its vast extension ecosystem. Postgres organizes data into tables with rows and columns, and allows you to query and manipulate that data using SQL (Structured Query Language). Postgres is designed to handle everything from small single-machine applications to large-scale, multi-user systems, and it supports advanced features like full-text search, custom data types, JSON support, and transactional integrity. Because of its flexibility and performance, Postgres is widely used in both traditional and modern data architectures as a source system for analytical pipelines. For our purposes, we'll use Postgres as a typical OLTP database that stores various records related to enrollment, students, professors, and so on.
 
@@ -96,7 +96,7 @@ To exit the Postgres terminal, type `\q`.
 
 Ok. Our source database is set up. Let's next move to Storage.
 
-## Storage
+# Storage
 
 When it comes to upstream OLAP databases, there are nearly countless options on the market. In this lab, we're using DuckDB, a very popular and lightweight OLAP database.
 
@@ -135,7 +135,7 @@ Exit DuckDB by typing `.exit`
 
 Ok, let's do something more interesting with DuckDB and load some data into it.
 
-## Data Ingestion
+# Data Ingestion
 
 Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB.
 
@@ -154,7 +154,7 @@ In the terminal, type `duckdb -ui`
 
 [  go through some examples of dlt refresh and incremental load with insert ]
 
-## Data Modeling and Transformation
+# Data Modeling and Transformation
 
 Create a new schema in DuckDB `CREATE SCHEMA serving;`
 
@@ -175,7 +175,59 @@ TRUNCATE TABLE serving.dim_courses;
 TRUNCATE TABLE serving.dim_professors;
 TRUNCATE TABLE serving.dim_date;
 
-## Serving Data for Analytics and AI
+# Serving Data for Analytics and AI
+
+Now for the fun stuff! You’ve built a pipeline and modeled your data—now it’s time to use that data. In this section, we’ll:
+
+- Build data-powered applications using Streamlit.
+- Use large language models (LLMs) to analyze your data and even generate SQL queries.
+
+## Data-Powered Applications in Streamlit
+
+Streamlit is an open-source Python library for building custom web apps for machine learning and data science. It’s perfect for quickly turning data scripts into interactive dashboards and apps—with just a few lines of Python.
+
+Streamlit lets you:
+- Display tables, charts, and metrics.
+- Create interactive widgets (sliders, dropdowns, text inputs).
+- Build full analytics dashboards or internal data tools.
+
+### Let’s Run Your First App
+
+Let's start your first Streamlit app to make sure things are running.
+
+From your terminal in the project directory, type: `streamlit run streamlit_app/hello_world.py`
+
+You should see a web browser window open in `localhost:8501` with a basic Streamlit app that says "hello world".
+
+If you see it—congrats! Your Streamlit environment is working.
+
+Notice the dropdown menu in the top right of the browser. Click it and look around.
+
+### Get to Know Streamlit
+
+Hello world is nice, but pretty boring. Here, we'll look at various ways to use Streamlit. The big thing to notice is how easy it is to build data-powered applications in Streamlit.
+
+From your terminal in the project directory, type: `streamlit run streamlit_app/basics.py`
+
+### Let's Analyze the Star Schema
+
+
+
+
+## AI For analysis and BI
+
+Ollama
+
+Open Llama3.2 `ollama run llama3.2`
+
+
+
+Langchang - simple example with llama3.2
+
+
+Text to SQL
+
+# Conclusion
 
 🧹 Cleanup (Optional)
 
