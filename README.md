@@ -129,7 +129,7 @@ In this lab, DuckDB plays the role of a lightweight analytical database where we
 
 Because DuckDB is extremely simple to use, we won't spend a ton of time going through the details. Instead, let's get familiar with DuckDB via the command line.
 
-1. Let's open up DuckDB by typing `duckdb`
+1. Let's open up DuckDB by typing `duckdb -ui`
 2. Generate a simple query `SELECT * FROM generate_series(5);`
 3. Find the length of a string `SELECT upper('duckdb is cool'), length('how long is this?');`
 4. Do a little math `SELECT 42 * 17 AS answer;`
