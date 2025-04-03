@@ -1,8 +1,10 @@
 # 🛠️ Data Engineering Lab: Building a Modern Data and AI Pipeline, HEDW 2025
 
-Welcome to the lab! The goal of this lab is to explore parts of the data enginering lifecycle using open-source tools. You'll learn traditional data pipeline and transformation and dive into using AI to query your data warehouse.
+Welcome! This hands-on lab will walk you through key parts of the modern data engineering lifecycle using open-source tools. You’ll build a traditional analytics pipeline and explore how to query your data warehouse using AI.
 
-You will:
+By the end, you will have built a small-scale, end-to-end pipeline—from data ingestion to transformation and visualization—with an LLM-powered query interface.
+
+## 🔍 What You’ll Do
 
 - Create tables and data in a Postgres database.
 - Extract data from the Postgres source database.
@@ -14,59 +16,64 @@ You will:
 
 This lab is part of a broader full-day data engineering workshop.
 
-## Learning Goals
+## 🎯 Learning Objectives
 
 By the end of this lab, you will:
-- Understand how to use dlt to extract and load data into DuckDB
-- Create a simple data warehouse for analytics and reporting
-- Use Streamlit to build a simple data app
-- Use AI tools LangChain and Ollama to generate SQL from natural language
+- Use dlt to extract and load data into DuckDB.
+- Create a simple data warehouse for analytics and reporting.
+- Build a Streamlit app for exploring your data.
+- Use AI tools like LangChain and Ollama to generate SQL from natural language prompts.
 
-Tools & Technologies
-- PostgreSQL – Source system
+## 🧰 Tools & Technologies
+- PostgreSQL – Source system (OLTP)
 - DLT (Data Load Tool) – Ingestion framework
-- DuckDB – Analytical storage engine
+- DuckDB – Analytical storage engine (OLAP)
 - SQL – Data transformation and modeling
-- Python – Pipeline and app development
-- Streamlit – Interactive data application
-- Ollama + LLama3.2 + LangChain – Text-to-SQL interface via LLMs
+- Python – Scripting and app development
+- Streamlit – Data visualization and app layer
+- Ollama + Llama3.2 + LangChain – LLM-based text-to-SQL interface
 
-## Environment Setup
+## ⚙️ Environment Setup
 
-This workshop runs entirely in GitHub Codespaces. No local setup is required.
-Note - there might be a small cost to run GitHub Codespaces.
+This lab runs entirely in GitHub Codespaces—no local setup needed!
+
+💡 Note: GitHub Codespaces may incur a small cost depending on your GitHub plan.
 
 1.	Open the lab repository in your browser.
 2.	Click “Code” > “Codespaces” > “Create codespace on main”.
-3.	Wait for the Codespace to initialize. This should take a few minutes to spin up.
+3.	Wait a few minutes for the Codespace to initialize.
 
-Lab Instructions
+## 📋 Lab Instructions
 
-Each step contains descriptions, hints, and blanks for you to fill in with code.
+Each step includes explanations, hints, and code blanks for you to complete.
 
-_WARNING_ - Whatever you do, do _NOT_ exit codespaces or shutdown ports that are running (unless you're told it's ok to do so). Doing so will force you to start the entire lab over.
+⚠️ _WARNING_ - _Do not_ exit your Codespace or shut down running ports unless instructed. Doing so may require you to restart the lab from scratch.
 
-# Source Systems
+# 🗄️ Source Systems
 
-In this lab, we'll use PostgresSQL as our source database. PostgreSQL (often referred to as Postgres) is a powerful, open-source relational database management system (RDBMS) known for its reliability, feature richness, and standards compliance. Some call it the "Swiss Army Knife" of databases, due to its vast extension ecosystem. Postgres organizes data into tables with rows and columns, and allows you to query and manipulate that data using SQL (Structured Query Language). Postgres is designed to handle everything from small single-machine applications to large-scale, multi-user systems, and it supports advanced features like full-text search, custom data types, JSON support, and transactional integrity. Because of its flexibility and performance, Postgres is widely used in both traditional and modern data architectures as a source system for analytical pipelines. For our purposes, we'll use Postgres as a typical OLTP database that stores various records related to enrollment, students, professors, and so on.
+We’ll start by setting up our source system using PostgreSQL.
 
-### Create Tables and Load Data
+PostgreSQL (or “Postgres”) is a powerful open-source relational database management system (RDBMS) known for its flexibility, reliability, and feature-rich extension ecosystem. It’s widely used in both transactional systems and as a source for analytical pipelines.
+
+In this lab, we’ll use Postgres as our operational (OLTP) database, storing mock data for students, professors, enrollment, and more.
+
+## ✅ 1.  Create the Database and Load Tables
 
 Postgres Database Creation
 
-1. Open the Postgres command line interface (cli). In the command line, type `psql -U postgres`
+1. Open the Postgres command line interface (CLI). In the command line, type `psql -U postgres`
 2. Next, let's create the database. `CREATE DATABASE university;`
 3. Confirm the database is created `\l`
 4. Connect to the university database `\c university;`
 
-Create Tables
+## 🧱 Step 2: Create Tables
 
 1. Open the pg_scripts folder
 2. Open the `create_tables_pg.sql` file. Select all and copy.
 3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
 4. Verify the tables are in Postgres using the `\dt` command.
 
-Load Data
+## 📦 Step 3: Insert Data
 
 1. In the pg_scripts folder, open the `insert_data_pg.sql` file.
 2. Select all and copy.
@@ -90,11 +97,9 @@ should list the following classes
 - Principles of Economics
 - Linear Algebra
 
-You can choose to exit the Postgres terminal or keep the terminal tab open for now.
+You can now exit the Postgres terminal with: `\q`.
 
-To exit the Postgres terminal, type `\q`.
-
-Ok. Our source database is set up. Let's next move to Storage.
+Nice work! Your source database is ready. Next up: storage and ingestion.
 
 # Storage
 
