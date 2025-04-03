@@ -273,6 +273,8 @@ From the terminal, open the file `llms/llm_data_warehouse.py`
 
 Let's look at what's going on.
 
+`what courses have the highest enrollment?`
+
 
 
 
