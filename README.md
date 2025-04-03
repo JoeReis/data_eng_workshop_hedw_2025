@@ -14,7 +14,7 @@ You will:
 
 This lab is part of a broader full-day data engineering workshop.
 
-Learning Goals
+## Learning Goals
 
 By the end of this lab, you will:
 - Understand how to use dlt to extract and load data into DuckDB
@@ -31,7 +31,7 @@ Tools & Technologies
 - Streamlit – Interactive data application
 - Ollama + LLama3.2 + LangChain – Text-to-SQL interface via LLMs
 
-Environment Setup
+## Environment Setup
 
 This workshop runs entirely in GitHub Codespaces. No local setup is required.
 Note - there might be a small cost to run GitHub Codespaces.
@@ -44,7 +44,7 @@ Lab Instructions
 
 Each step contains descriptions, hints, and blanks for you to fill in with code.
 
-_WARNING_ - Whatever you do, do _NOT_ exit codespaces or shutdown ports that are running. Doing so will force you to start the entire lab over.
+_WARNING_ - Whatever you do, do _NOT_ exit codespaces or shutdown ports that are running (unless you're told it's ok to do so). Doing so will force you to start the entire lab over.
 
 # Source Systems
 
