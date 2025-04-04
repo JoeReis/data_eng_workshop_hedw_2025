@@ -4,14 +4,13 @@ from dlt.sources.sql_database import sql_database
 
 def load_university_pipeline():
     source = sql_database().with_resources(
-        "courses", "course_assignments", "enrollments", 
-        "professors", "students", "student_admissions"
+        # fill here ---
     )
     
     pipeline = dlt.pipeline(
-        pipeline_name="university_data",
-        destination="duckdb",
-        dataset_name="staging",
+        pipeline_name="---",
+        destination="---",
+        dataset_name="---",
     )
     
     load_info = pipeline.run(source)

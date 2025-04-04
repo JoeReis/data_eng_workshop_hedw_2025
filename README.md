@@ -141,16 +141,58 @@ You just explored some of DuckDB’s built-in features—no server, no config, n
 
 Now that you’ve seen what DuckDB can do, let’s move beyond simple queries. Next, we’ll load real data from our Postgres source using dlt and start modeling it with SQL.
 
-# Data Ingestion
+# 🔄 Data Ingestion
 
-Let's use Data Load Tool (dlt) to load data from Postgres to DuckDB.
+In this step, we’ll use dlt (Data Load Tool) to extract data from Postgres and load it into DuckDB.
 
-1. Open the file `dlt_pipeline.py`
-2. 
+dlt makes it easy to build declarative data pipelines in Python. You’ll define which Postgres tables to pull, then run the pipeline to ingest the data into a local DuckDB file.
 
-In the terminal, type `python dlt_pipeline.py`
+## ⚙️ Step-by-Step Instructions
 
-This will create a DuckDB database called university_data.duckdb
+1. Open the pipeline file. In your Codespace, open: `dlt_pipeline.py`
+
+2. Define the source tables
+
+    As a reminder, we used the following tables:
+    - courses
+    - course_assignments
+    - enrollments
+    - professors
+    - students
+    - student_admissions
+
+    Your code should look like this.
+
+    ```python
+    def load_university_pipeline():
+        source = sql_database().with_resources(
+            "courses",
+            "course_assignments",
+            "enrollments",
+            "professors",
+            "students",
+            "student_admissions"
+        )
+    ```
+
+3. Configure your pipeline
+
+    Still in dlt_pipeline.py, fill in the pipeline metadata:
+
+    ```python
+    pipeline = dlt.pipeline(
+        pipeline_name="university_data",
+        destination="duckdb",
+        dataset_name="stg_university_data"
+    )
+    ```
+
+4. Run the pipeline 
+
+    Back in the terminal, run `python dlt_pipeline.py`
+
+    This will create a DuckDB database called `university_data.duckdb`
+
 
 Let's see what's in this database. Thankfully DuckDB offers a new handy UI to inspect the data in DuckDB.
 
@@ -158,19 +200,82 @@ In the terminal, type `duckdb -ui`
 
 `SELECT * FROM stg_university_data.students;`
 
-[  go through some examples of dlt refresh and incremental load with insert ]
+Duckdb contains the data extracted from Postgres!
 
-# Data Modeling and Transformation
+## 🔁 Bonus: Experiment with Refresh and Incremental Loads
 
-Create a new schema in DuckDB `CREATE SCHEMA serving;`
+Once your initial pipeline is working, try exploring how dlt handles updates:
+- Modify a row in Postgres and re-run the pipeline.
+- Add a new row and re-run it again.
+- Observe whether dlt refreshes the data or appends new rows.
 
-[ create a new layer in duckdb - serving with kimball ]
+You can configure dlt for full refresh or incremental loading based on your pipeline’s settings and primary keys. It also does data transformations and much more.
 
-[  go through some examples of dlt refresh and increamtanl load with update ]
+For more information, see dlt's documenation: https://dlthub.com/docs/intro
 
-[ scd ]
+# 🧱 Data Modeling & Transformation
 
-If you have an error loading tables, truncate and start over
+In this section, you’ll create a dimensional data model using the data we previously ingested into DuckDB from Postgres.
+
+We’ll use a modeling pattern called ELT:
+- Extract data from the source (Postgres)
+- Load it into a staging layer (DuckDB)
+- Transform it into an analytical model
+
+## 🤷‍♂️ Why ELT?
+
+Traditional ETL (Extract, Transform, Load) transforms data before it hits the data warehouse. But modern data pipelines use ELT, which lets you:
+- Load raw data into your analytical engine first
+- Transform data using scalable SQL logic
+- Separate concerns by modeling data in clean, structured layers
+
+We’ve already completed the “E” and “L” parts. Now we’re in the “T” phase—transforming the data into dimensional models for analytics and AI.
+
+## 🛠️ Step-by-Step Instructions
+
+1. Launch DuckDB CLI
+
+    If you’re not already in DuckDB, start the CLI: `duckdb`
+
+2. Create a Schema for the Serving Layer
+
+    Create a new schema in DuckDB `CREATE SCHEMA serving;`
+
+We just created a separate schema for serving the data. This is distinct from staging the data like we did in the prior section.
+
+3. Next, let's create some tables. Open the file `duckdb_scripts/create_tables_ddb.sql`
+
+- Copy all the SQL.
+- Paste it into the DuckDB CLI and run it.
+
+This script creates dimension and fact tables, such as:
+- dim_students, dim_courses, dim_professors, dim_date
+- fact_enrollments, fact_course_assignments
+
+4. Populate the Star Schema
+
+Now let’s populate the serving layer using the data from the staging schema:
+
+`duckdb_scripts/migrate_postgres_to_duckdb_star_schema.sql`
+
+- Open the file and copy all the SQL.
+- Paste it into the DuckDB CLI.
+- Run the script to transform and load the data.
+
+You now have a functioning dimensional model in your serving schema!
+
+## 🧪 Optional: Experiment with Updates & Incremental Loads
+
+Once your model is working, try the following:
+- Add new records in Postgres and rerun the pipeline.
+- Update existing records and observe what happens when you rerun the transformation script.
+- Explore how dlt handles refresh vs. incremental loading.
+
+Because slowly changing dimensions are par for the course in data warehouse workshops, no need to rehash it for the millionth time.
+
+## 🧹 Got an Error? Start Fresh
+
+If something goes wrong during transformation, you can truncate the tables and try again.
 
 TRUNCATE TABLE serving.fact_enrollments;
 TRUNCATE TABLE serving.fact_course_assignments;
@@ -181,14 +286,11 @@ TRUNCATE TABLE serving.dim_courses;
 TRUNCATE TABLE serving.dim_professors;
 TRUNCATE TABLE serving.dim_date;
 
-# Serving Data for Analytics and AI
+# 📊 Serving Data for Analytics & AI
 
-Now for the fun stuff! You’ve built a pipeline and modeled your data—now it’s time to use that data. In this section, we’ll:
+From where I sit, data engineering is moving to the Serving layer of the data engineering lifecycle. The data warehouse is the cornerstone, but serving data from it evolves. This means the ability to create data and AI powered applications.
 
-- Build data-powered applications using Streamlit.
-- Use large language models (LLMs) to analyze your data and even generate SQL queries.
-
-## Data-Powered Applications in Streamlit
+## 🖥️ Data-Powered Applications in Streamlit
 
 Streamlit is an open-source Python library for building custom web apps for machine learning and data science. It’s perfect for quickly turning data scripts into interactive dashboards and apps—with just a few lines of Python.
 
@@ -197,43 +299,48 @@ Streamlit lets you:
 - Create interactive widgets (sliders, dropdowns, text inputs).
 - Build full analytics dashboards or internal data tools.
 
-### Let’s Run Your First App
+## 🚀 Run Your First Streamlit App
 
 Let's start your first Streamlit app to make sure things are running.
 
 From your terminal in the project directory, type: `streamlit run streamlit_app/hello_world.py`
 
-You should see a web browser window open in `localhost:8501` with a basic Streamlit app that says "hello world".
+A browser window should open at `http://localhost:8501` showing a basic “Hello, Streamlit” app.
 
-If you see it—congrats! Your Streamlit environment is working.
+✅ If you see it—congrats! Your Streamlit environment is up and running.
 
-Notice the dropdown menu in the top right of the browser. Click it and look around.
+Explore the app interface, including the dropdown menu in the top right.
 
-### Get to Know Streamlit
+## 🧪 Learn the Basics of Streamlit
 
-Hello world is nice, but pretty boring. Here, we'll look at various ways to use Streamlit. The big thing to notice is how easy it is to build data-powered applications in Streamlit.
+Let’s go beyond “Hello World” and explore what Streamlit can do.
 
-Open the file `streamlit_app/basics.py`
+1. Open the file `streamlit_app/basics.py`
 
 From your terminal in the project directory, type: `streamlit run streamlit_app/basics.py`
 
-Let's walk through the exercises.
+2.	Walk through the exercises inside the file. They demonstrate how to use common Streamlit features like displaying data, adding interactivity, and more.
 
 The solutions to these exercises are located at `streamlit_app/basics_solutions.py`
 
 Now that you've got a good grasp of Streamlit basics, let's connect our streamlit application to our data warehouse.
 
-### Let's Analyze our Data Warehouse
+## 📈 Connect Streamlit to Your Data Warehouse
 
-Here, we're going to look at more complex queries and data applications in our data warehouse.
+Here, we're going to look at more complex queries and data applications in our data warehouse.v
+
+Now let’s build a more advanced app that interacts with your modeled data in DuckDB.
+	1.	Stop the current app (Ctrl + C)
 
 Let’s begin with a simple ranking. This query will show the five courses with the highest number of student enrollments.
 
-`SELECT c.course_title, COUNT(*) AS student_count
+```
+SELECT c.course_title, COUNT(*) AS student_count
 FROM fact_enrollments f
 JOIN dim_courses c ON f.course_sk = c.course_sk
 WHERE c.course_title = 'Intro to Computer Science'
-GROUP BY c.course_title;`
+GROUP BY c.course_title;
+```
 
 Next, let's look how we can filter to the course to determine the number of students per course
 
