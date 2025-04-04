@@ -62,7 +62,7 @@ Instructions:
 
 Example: "What students are enrolled in Linear Algebra?"
 SQL Query:
-SELECT S.student_name 
+SELECT S.first_name || ' ' || S.last_name 
 FROM serving.fact_enrollments AS E 
 JOIN serving.dim_courses AS C ON E.course_sk = C.course_sk 
 JOIN serving.dim_students AS S ON E.student_sk = S.student_sk

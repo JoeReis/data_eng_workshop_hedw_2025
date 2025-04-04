@@ -288,7 +288,7 @@ TRUNCATE TABLE serving.dim_date;
 
 # 📊 Serving Data for Analytics & AI
 
-From where I sit, data engineering is moving to the Serving layer of the data engineering lifecycle. The data warehouse is the cornerstone, but serving data from it evolves. This means the ability to create data and AI powered applications.
+Data engineering is moving to the Serving layer of the data engineering lifecycle. The data warehouse is the cornerstone, but serving data from it evolves. This means the ability to create data and AI powered applications.
 
 ## 🖥️ Data-Powered Applications in Streamlit
 
@@ -376,7 +376,7 @@ You'll probably get a response about molecules and gases interacting with sunlig
 
 Hit `Ctrl D` to exit llama3.2
 
-### Let's Ask AI About Our Data Warehouse
+## Let's Ask AI About Our Data Warehouse
 
 You saw LLama3.2. It's just an LLM, similar to what you interact with if you ask ChatGPT, Claude, or Gemini questions.
 
@@ -402,14 +402,17 @@ Go to DuckDB and type `DESCRIBE serving.fact_enrollments;`
 
 Let's change that to the correct key `date_sk`
 
+Here's another question that might break the LLM's response `what students are enrolled in linear algebra?`
 
+The big takeaway - prompts and tuning are key. You'll spend a lot of time trying to configure LLM interactions. Text to SQL is especially hard (at least today) because database tables don't provide context or semantics. It's just column names and joins.
 
+AI is great but it takes time to work, and the underlying data is critical to making it work.
 
+Some suggestions
+- work with stakeholders on the types of questions they'll ask
+- use a bigger model. This is a miniature model for demonstration purposes, but it's low on parameters 7B.
+- subscribe to one of the AI vendors and use their models. Or use a dedicated service for text to sql.
 
-Langchang - simple example with llama3.2
-
-
-Text to SQL
 
 # Conclusion
 
