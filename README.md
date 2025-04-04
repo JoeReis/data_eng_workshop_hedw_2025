@@ -382,11 +382,25 @@ You saw LLama3.2. It's just an LLM, similar to what you interact with if you ask
 
 The real power of LLMs is when they're working with YOUR data.
 
-From the terminal, open the file `llms/llm_data_warehouse.py`
+From the terminal, open the file `streamlit_app/llm_data_warehouse.py`
 
 Let's look at what's going on.
 
 `what courses have the highest enrollment?`
+
+LLMs are good at taking your input and hallucinating. Let's see and example of this.
+
+Ask `when was the most recent enrollment?`
+
+You'll probably see an error. 
+
+Let's go your prompt in `streamlit_app/llm_data_warehouse.py`
+
+Notice that you described a key that doesn't exist - `enrollment_date_key`
+
+Go to DuckDB and type `DESCRIBE serving.fact_enrollments;`
+
+Let's change that to the correct key `date_sk`
 
 
 
