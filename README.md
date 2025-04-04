@@ -327,12 +327,22 @@ Now that you've got a good grasp of Streamlit basics, let's connect our streamli
 
 ## 📈 Connect Streamlit to Your Data Warehouse
 
-Here, we're going to look at more complex queries and data applications in our data warehouse.v
+Now that you’ve built and modeled your data warehouse, it’s time to create a more interactive app that lets you run complex queries and explore the data visually.
 
+We’ll use a Streamlit app that queries the data in your serving schema in DuckDB.
+
+### 🛠️ Setup Instructions
 Now let’s build a more advanced app that interacts with your modeled data in DuckDB.
-	1.	Stop the current app (Ctrl + C)
 
-Let’s begin with a simple ranking. This query will show the five courses with the highest number of student enrollments.
+1.	If you have a Streamlit app running, stop it by pressing Ctrl + C in your terminal.
+
+2. Run the new app: `streamlit run streamlit_app/duckdb_streamlit.py`
+
+3. Open the file: `streamlit_app/duckdb_streamlit.py`
+
+### 📕 Example Query: Course Enrollment Ranking
+
+Inside the app, you’ll run SQL queries like this one to rank courses by the number of enrolled students.
 
 ```
 SELECT c.course_title, COUNT(*) AS student_count
@@ -342,29 +352,23 @@ WHERE c.course_title = 'Intro to Computer Science'
 GROUP BY c.course_title;
 ```
 
-Next, let's look how we can filter to the course to determine the number of students per course
-
-First, close Streamlit (Crtl C), then type `streamlit run streamlit_app/duckdb_streamlit.py`
-
-Also, open the file `streamlit_app/duckdb_streamlit.py`
-
-[ make this a fill in the blanks example ]
+You can build on this query by adding filters or parameters in your Streamlit code. For example, you might want to let users select a course and return all students enrolled in it. Give it a shot. Add some other filters and re-run the Streamlit app in the browser to see the changes.
 
 We've spent some time looking at data-powered applications. How about we look at AI-powered apps?
 
-## AI For Analysis and BI
+## 🤖 AI for Analysis and BI
 
-So far, we’ve explored how data powers analytics and applications — but what happens when we bring AI into the mix?
+You’ve now seen how to query and visualize your data. What happens when we let AI do the querying?
 
-Let’s shift gears and explore how Large Language Models (LLMs) can enhance analysis, generate insights, and even help us write SQL queries.
+In this section, you’ll use a Large Language Model (LLM) to generate SQL from natural language and analyze your own data warehouse.
 
-### Run the LLM with Ollama
+### ⚡ Run an LLM Locally with Ollama
 
 Commercial LLMs are great if you want to interact with their version of the world they've been trained on. What happens if you want to run a model locally to query your internal data.
 
-Thankfully, Ollama provides a great service for downloading models and interacting with them.
+Ollama lets you run open-source language models on your local machine.
 
-We’ll be using Llama 3.2, an open-source language model, to power our AI assistant.
+We’ll use Llama 3.2, a compact but capable open-source model, to handle basic natural language prompts.
 
 To start the model locally, just run:
 
@@ -372,15 +376,20 @@ Open Llama3.2 `ollama run llama3.2`
 
 Ask Llama3.2 `why is the sky blue?`
 
-You'll probably get a response about molecules and gases interacting with sunlight. The responses will vary because LLMs are probabilistic.
+The model will respond with a general explanation. This helps confirm the LLM is running locally. You'll probably get a response about molecules and gases interacting with sunlight. The responses will vary because LLMs are probabilistic.
+
+Ask it some other questions.
+
+- What do you think of the answers compared with commercially available LLMs?
+- What happens if you ask the same question a few times?
 
 Hit `Ctrl D` to exit llama3.2
 
-## Let's Ask AI About Our Data Warehouse
+## 🧠 Ask AI About Your Data
 
-You saw LLama3.2. It's just an LLM, similar to what you interact with if you ask ChatGPT, Claude, or Gemini questions.
+You saw LLama3.2. It's a pretty small LLM (7B parameters) compared with what you interact with if you ask questions to ChatGPT, Claude, Deepseek, or Gemini.
 
-The real power of LLMs is when they're working with YOUR data.
+The real power of LLMs is when they're working with YOUR data. Now let’s connect Llama 3.2 to your DuckDB data warehouse.
 
 From the terminal, open the file `streamlit_app/llm_data_warehouse.py`
 
@@ -405,6 +414,8 @@ Let's change that to the correct key `date_sk`
 Here's another question that might break the LLM's response `what students are enrolled in linear algebra?`
 
 The big takeaway - prompts and tuning are key. You'll spend a lot of time trying to configure LLM interactions. Text to SQL is especially hard (at least today) because database tables don't provide context or semantics. It's just column names and joins.
+
+[ use a field that doesn't exist ]
 
 AI is great but it takes time to work, and the underlying data is critical to making it work.
 
