@@ -403,7 +403,9 @@ The LLM uses LangChain to turn your question into a SQL query, run it against Du
 
 LLMs are good at taking your input, but they often make mistakes and return erroneous output. This is called "hallucination". Let's see and example of this.
 
-Ask `how many kittens attended the Underwater Basketweaving course?"
+Ask `how many kittens attended the Underwater Basketweaving course?`
+
+Look at the SQL response. The LLM will always respond with _something_, whether it makes sense or not.
 
 Look at the SQL output the LLM creates.
 
@@ -421,13 +423,9 @@ Go to DuckDB and type `DESCRIBE serving.fact_enrollments;`
 
 Let's change that to the correct key `date_sk`
 
-Let's re-run the question. You should get a correct answer.
+Let's re-run the question. You _should_ get a correct answer.
 
 Here's another question that might break the LLM's response `what students are enrolled in linear algebra?`
-
-Let's give the LLM a nonsensical question `how many burritos attended underwater basket weaving class?`
-
-Look at the SQL response. The LLM will always respond with _something_, whether it makes sense or not.
 
 The big takeaway - prompts and tuning are key. You'll spend a lot of time trying to configure LLM interactions. Text to SQL is especially hard (at least today) because database tables don't provide context or semantics. It's just column names and joins.
 
