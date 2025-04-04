@@ -393,15 +393,25 @@ The real power of LLMs is when they're working with YOUR data. Now let’s conne
 
 From the terminal, open the file `streamlit_app/llm_data_warehouse.py`
 
-Let's look at what's going on.
+This will open up a Streamlit app that is already connected to your DuckDB data warehouse. Let's have a look at the code in `streamlit_app/llm_data_warehouse.py`. There's a lot going on!
 
-`what courses have the highest enrollment?`
+In the browser, try asking: `what courses have the highest enrollment?`
 
-LLMs are good at taking your input and hallucinating. Let's see and example of this.
+The LLM uses LangChain to turn your question into a SQL query, run it against DuckDB, and return the result.
+
+## ⚠️ Expect Mistakes: Prompting is Everything
+
+LLMs are good at taking your input, but they often make mistakes and return erroneous output. This is called "hallucination". Let's see and example of this.
+
+Ask `how many kittens attended the Underwater Basketweaving course?"
+
+Look at the SQL output the LLM creates.
+
+Now let's make a slightly different error occur.
 
 Ask `when was the most recent enrollment?`
 
-You'll probably see an error. 
+You might get an error. Why? The model may generate SQL using a non-existent column like enrollment_date_key.
 
 Let's go your prompt in `streamlit_app/llm_data_warehouse.py`
 
@@ -411,19 +421,22 @@ Go to DuckDB and type `DESCRIBE serving.fact_enrollments;`
 
 Let's change that to the correct key `date_sk`
 
+Let's re-run the question. You should get a correct answer.
+
 Here's another question that might break the LLM's response `what students are enrolled in linear algebra?`
 
-The big takeaway - prompts and tuning are key. You'll spend a lot of time trying to configure LLM interactions. Text to SQL is especially hard (at least today) because database tables don't provide context or semantics. It's just column names and joins.
+Let's give the LLM a nonsensical question `how many burritos attended underwater basket weaving class?`
 
-[ use a field that doesn't exist ]
+Look at the SQL response. The LLM will always respond with _something_, whether it makes sense or not.
+
+The big takeaway - prompts and tuning are key. You'll spend a lot of time trying to configure LLM interactions. Text to SQL is especially hard (at least today) because database tables don't provide context or semantics. It's just column names and joins.
 
 AI is great but it takes time to work, and the underlying data is critical to making it work.
 
 Some suggestions
-- work with stakeholders on the types of questions they'll ask
-- use a bigger model. This is a miniature model for demonstration purposes, but it's low on parameters 7B.
-- subscribe to one of the AI vendors and use their models. Or use a dedicated service for text to sql.
-
+- Work with stakeholders on the types of questions they'll ask
+- Use a bigger model. This is a miniature model for demonstration purposes, but it's low on parameters 7B.
+- Subscribe a commercial AI vendor and use their models. Or use a dedicated service for text to sql.
 
 # Conclusion
 
