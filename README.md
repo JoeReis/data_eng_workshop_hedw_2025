@@ -47,7 +47,7 @@ This lab runs entirely in GitHub Codespaces—no local setup needed!
 
 Each step includes explanations, hints, and code blanks for you to complete.
 
-⚠️ _WARNING_ - _Do not_ exit your Codespace or shut down running ports unless instructed. Doing so may require you to restart the lab from scratch.
+⚠️ _WARNING_ - **_Do NOT_** exit your Codespace or shut down running ports unless instructed. Doing so may require you to restart the lab from scratch.
 
 # 🗄️ Source Systems
 
@@ -73,7 +73,7 @@ Postgres Database Creation
 3. Paste the code into the Postgres shell `university=#` prompt. Hit Enter.
 4. Verify the tables are in Postgres using the `\dt` command.
 
-## 📦 Step 3: Insert Data
+## ➡️ Step 3: Insert Data
 
 1. In the pg_scripts folder, open the `insert_data_pg.sql` file.
 2. Select all and copy.
@@ -101,44 +101,45 @@ You can now exit the Postgres terminal with: `\q`.
 
 Nice work! Your source database is ready. Next up: storage and ingestion.
 
-# Storage
+# 🗃️ Storage
 
-When it comes to upstream OLAP databases, there are nearly countless options on the market. In this lab, we're using DuckDB, a very popular and lightweight OLAP database.
+When it comes to upstream OLAP databases, there are nearly countless options on the market. In this lab, we're using DuckDB, a lightweight, high-performance OLAP (Online Analytical Processing) database that fits seamlessly into modern data engineering workflows.
 
-🦆 **Why are we using DuckDB in this lab?**
+## 🦆 Why DuckDB?
 
 DuckDB is a lightweight, high-performance analytical database that fits perfectly into modern data engineering workflows. Here’s why it’s ideal for this lab:
 
-- **Ease of Use**: DuckDB runs in-process, meaning no server setup or maintenance is required. You can use it directly from your Python scripts or notebooks.
-- **Speed**: It’s optimized for analytical queries, enabling fast processing of large datasets.
-- **Portability**: DuckDB is self-contained and works across platforms, making it easy to integrate into various environments.
-- **SQL Support**: It supports advanced SQL features, allowing you to perform complex transformations and modeling.
-- **Scalability**: While lightweight, DuckDB can handle substantial data volumes, making it suitable for both prototyping and production use cases.
+DuckDB has rapidly become a go-to tool for analytics and prototyping. It’s ideal for this lab because it offers:
 
-Key Features of DuckDB
-- **Fast analytics**: DuckDB is optimized for OLAP (analytical) workloads and columnar data access.
-- **In-process**: It runs inside your Python script or notebook—no need to run a separate database server.
-- **Easy integration**: Works great with tools like Pandas, dbt, and even Excel or Parquet files.
-- **Portable**: The whole database can be saved as a single .duckdb file and moved around easily.
+- Zero Setup – DuckDB runs in-process, directly from your Python scripts or terminal. No servers to manage.
+- Speed – Optimized for analytical queries over large datasets.
+- Portability – Everything is stored in a single .duckdb file you can move around.
+- Flexibility – Compatible with tools like Pandas, Parquet, dbt, and even Excel.
+- Rich SQL Support – Full support for complex SQL queries, perfect for dimensional modeling.
 
-In this lab, DuckDB plays the role of a lightweight analytical database where we:
-- Load and store data ingested from Postgres using dlt.
-- Build dimensional models (like fact and dimension tables) using SQL.
-- Query and analyze the data quickly and interactively.
-- Power visualizations and LLM-based interfaces without needing a full database server.
+✅ In this lab, DuckDB serves as your analytical database:
+
+- It ingests data extracted from Postgres.
+- Stores fact and dimension tables.
+- Powers both dashboards and AI-driven query interfaces.
+- Requires no infrastructure or cloud setup.
 
 Because DuckDB is extremely simple to use, we won't spend a ton of time going through the details. Instead, let's get familiar with DuckDB via the command line.
 
-1. Let's open up DuckDB by typing `duckdb -ui`
-2. Generate a simple query `SELECT * FROM generate_series(5);`
-3. Find the length of a string `SELECT upper('duckdb is cool'), length('how long is this?');`
-4. Do a little math `SELECT 42 * 17 AS answer;`
-5. Generate a date range `SELECT * FROM generate_series(date '2025-01-01', date '2025-01-10', interval 1 day);`
-6. JSON parsing from raw strings `SELECT json_extract('{"name": "Tina", "role": "engineer"}', '$.role') AS role;`
+## 🧪 Try It Out: DuckDB Basics
+
+1. Let's open up DuckDB by typing `duckdb -ui` (if the UI doesn't work, just open up the DuckDB CLI `duckdb`)
+2. Generate a series of numbers: `SELECT * FROM generate_series(5);`
+3. Find the length of a string: `SELECT upper('duckdb is cool'), length('how long is this?');`
+4. Do a little math: `SELECT 42 * 17 AS answer;`
+5. Generate a date range: `SELECT * FROM generate_series(date '2025-01-01', date '2025-01-10', interval 1 day);`
+6. JSON parsing from raw strings: `SELECT json_extract('{"name": "Tina", "role": "engineer"}', '$.role') AS role;`
 
 Exit DuckDB by typing `.exit`
 
-Ok, let's do something more interesting with DuckDB and load some data into it.
+You just explored some of DuckDB’s built-in features—no server, no config, no friction.
+
+Now that you’ve seen what DuckDB can do, let’s move beyond simple queries. Next, we’ll load real data from our Postgres source using dlt and start modeling it with SQL.
 
 # Data Ingestion
 
