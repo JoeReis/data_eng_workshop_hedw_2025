@@ -47,11 +47,34 @@ Tables:
 Instructions:
 1. Generate ONLY SELECT statements.
 2. Prefix table names with the schema 'serving.' in the FROM and JOIN clauses (e.g., FROM serving.fact_enrollments AS E).
-3. When table aliases (like 'AS E', 'AS C') are used in FROM/JOIN, **you MUST use these aliases to refer to columns** in the SELECT, WHERE, GROUP BY, and ORDER BY clauses (e.g., SELECT C.name, COUNT(E.enrollment_id) ... WHERE C.department = '...'). Do NOT use the full schema-qualified name like 'serving.dim_courses.name' when an alias exists.
+3. When table aliases (like 'AS E', 'AS C') are used in FROM/JOIN, **you MUST use these aliases to refer to columns** in the SELECT, WHERE, GROUP BY, and ORDER BY clauses (e.g., SELECT C.course_title, COUNT(E.enrollment_sk) ... WHERE C.department = '...'). Do NOT use the full schema-qualified name like 'serving.dim_courses.course_title' when an alias exists.
 4. Do NOT use quotes around schema-qualified table names in the FROM/JOIN clauses (e.g., use serving.dim_courses, NOT "serving.dim_courses").
 5. Keep queries simple and efficient for DuckDB.
-5. Join on sk, not id.
-7. MOST IMPORTANT: Your response MUST be ONLY the SQL query, with NO introductory text, explanations, notes, or 'Answer:' prefixes. End the query with a semicolon (;).
+6. IMPORTANT: For student information, you MUST JOIN with dim_students table. For course information, you MUST JOIN with dim_courses table. For professor information, you MUST JOIN with dim_professors table.
+7. Tables are joined based on the following relationships:
+   - fact_enrollments joins to dim_students on student_sk
+   - fact_enrollments joins to dim_courses on course_sk
+   - fact_course_assignments joins to dim_professors on professor_sk
+   - fact_course_assignments joins to dim_courses on course_sk
+   - fact_enrollments and fact_course_assignments join to dim_date on date_sk
+8. Join on sk columns, not id columns.
+9. MOST IMPORTANT: Your response MUST be ONLY the SQL query, with NO introductory text, explanations, notes, or 'Answer:' prefixes. End the query with a semicolon (;).
+
+Example: "What students are enrolled in Linear Algebra?"
+SQL Query:
+SELECT S.student_name 
+FROM serving.fact_enrollments AS E 
+JOIN serving.dim_courses AS C ON E.course_sk = C.course_sk 
+JOIN serving.dim_students AS S ON E.student_sk = S.student_sk
+WHERE C.course_title = 'Linear Algebra';
+
+Example: "Which professors teach Computer Science courses?"
+SQL Query:
+SELECT DISTINCT P.professor_name 
+FROM serving.fact_course_assignments AS A 
+JOIN serving.dim_professors AS P ON A.professor_sk = P.professor_sk 
+JOIN serving.dim_courses AS C ON A.course_sk = C.course_sk 
+WHERE C.department = 'Computer Science';
 
 Question: {query}
 
