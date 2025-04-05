@@ -61,7 +61,7 @@ In this lab, we’ll use Postgres as our operational (OLTP) database, storing mo
 
 Postgres Database Creation
 
-1. Open the Postgres command line interface (CLI). In the command line, type `psql -U postgres`
+1. Open the Postgres command line interface (CLI). In the command line, type `psql`
 2. Next, let's create the database. `CREATE DATABASE university;`
 3. Confirm the database is created `\l`
 4. Connect to the university database `\c university;`
