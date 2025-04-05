@@ -264,6 +264,8 @@ Now let’s populate the serving layer using the data from the staging schema:
 
 You now have a functioning dimensional model in your serving schema!
 
+Try some queries in the DuckDB CLI to inspect the data.
+
 ## 🧪 Optional: Experiment with Updates & Incremental Loads
 
 Once your model is working, try the following:
