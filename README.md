@@ -135,7 +135,7 @@ Because DuckDB is extremely simple to use, we won't spend a ton of time going th
 5. Generate a date range: `SELECT * FROM generate_series(date '2025-01-01', date '2025-01-10', interval 1 day);`
 6. JSON parsing from raw strings: `SELECT json_extract('{"name": "Tina", "role": "engineer"}', '$.role') AS role;`
 
-Exit DuckDB by typing `.exit;`
+Exit DuckDB by typing `.exit`
 
 You just explored some of DuckDB’s built-in features—no server, no config, no friction.
 
