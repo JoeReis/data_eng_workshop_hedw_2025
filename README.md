@@ -389,7 +389,7 @@ Hit `Ctrl D` to exit llama3.2
 
 ## 🧠 Ask AI About Your Data
 
-You saw LLama3.2. It's a pretty small LLM (7B parameters) compared with what you interact with if you ask questions to ChatGPT, Claude, Deepseek, or Gemini.
+You saw LLama3.2. It's a pretty small LLM (3B parameters) compared with what you interact with if you ask questions to ChatGPT, Claude, Deepseek, or Gemini.
 
 The real power of LLMs is when they're working with YOUR data. Now let’s connect Llama 3.2 to your DuckDB data warehouse.
 
