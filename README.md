@@ -435,7 +435,7 @@ AI is great but it takes time to work, and the underlying data is critical to ma
 
 Some suggestions
 - Work with stakeholders on the types of questions they'll ask
-- Use a bigger model. This is a miniature model for demonstration purposes, but it's low on parameters 7B.
+- Use a bigger model. This is a miniature model for demonstration purposes, but it's low on parameters 3B.
 - Subscribe a commercial AI vendor and use their models. Or use a dedicated service for text to sql.
 
 # Conclusion
