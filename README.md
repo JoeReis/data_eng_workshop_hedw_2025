@@ -183,7 +183,7 @@ dlt makes it easy to build declarative data pipelines in Python. You’ll define
     pipeline = dlt.pipeline(
         pipeline_name="university_data",
         destination="duckdb",
-        dataset_name="stg_university_data"
+        dataset_name="staging"
     )
     ```
 
@@ -198,7 +198,7 @@ Let's see what's in this database. Thankfully DuckDB offers a new handy UI to in
 
 In the terminal, type `duckdb -ui`
 
-`SELECT * FROM stg_university_data.students;`
+`SELECT * FROM staging.students;`
 
 Duckdb contains the data extracted from Postgres!
 
